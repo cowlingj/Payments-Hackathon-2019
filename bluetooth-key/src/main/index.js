@@ -1,10 +1,12 @@
 import bleno from "bleno"
-import { graceful, schedule, force } from "./shutdown";
-import { UUID } from "./config";
+import { graceful, schedule, force } from "./shutdown"
+import { UUID } from "./config"
+import readline from "readline"
 
 const shutdownIfNotInitialised = schedule()
 
 let key = new Buffer("")
+let isEnabled = false
 
 bleno.on('stateChange', (state) => {
 
@@ -34,6 +36,8 @@ bleno.on('advertisingStart', (e)=>{
     graceful(1)
   }
 
+  readLoop()
+
   var primaryService = new bleno.PrimaryService({
     uuid: "1825",
     characteristics: [
@@ -41,7 +45,7 @@ bleno.on('advertisingStart', (e)=>{
         uuid: "2A3D", 
         properties: ["read", "write"],
         onReadRequest: (offset, callback) => {
-          callback(bleno.Characteristic.RESULT_SUCCESS, key.slice(offset))
+          callback(bleno.Characteristic.RESULT_SUCCESS, isEnabled? key.slice(offset) : new Buffer(""))
         },
         onWriteRequest: (data, offset, withoutResponse, callback) => {
           if (offset === 0) {
@@ -83,3 +87,38 @@ process.on('SIGTERM', () => {
     graceful()
   })
 });
+
+const reader = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+})
+
+const helpText = `commands:
+  help: display this message
+  status: the current lock status of the device
+  set [locked|unlocked]: set the lock status of the device 
+`
+
+reader.on("close", () => {
+  console.log("")
+  graceful()
+})
+
+function readLoop() {
+  reader.question(`# `, (answer) => {
+    if (answer === "help") {
+      console.log(helpText)
+    } else if (answer === "status") {
+      console.log(`device is currently ${isEnabled? "unlocked" : "locked"}`)
+    } else if (answer === "set unlocked") {
+      isEnabled = true
+    } else if (answer === "set locked") {
+      isEnabled = false
+    } else {
+      console.log("command not recognised, enter \"help\" for list of commands")
+    }
+
+  
+  readLoop()
+})
+}
