@@ -1,1 +1,5 @@
-go build -o build/app src/app/main.go
+export GOPATH="$(pwd)"
+export GOBIN="$(pwd)/bin"
+
+go install main
+echo "${GOBIN}/main"

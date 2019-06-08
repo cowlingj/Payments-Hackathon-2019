@@ -1,1 +1,1 @@
-go run src/app/main.go
+$(./scripts/build.sh)

@@ -1,1 +1,1 @@
-go run main.go
+$(./scripts/build.sh)
