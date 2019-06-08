@@ -1,0 +1,24 @@
+{
+  "name": "bluetooth-key",
+  "version": "0.0.1",
+  "description": "",
+  "main": "main/index.js",
+  "scripts": {
+    "build": "webpack --mode development --config build-config/webpack.config.js",
+    "start": "node build/main.bundle.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "babel-loader": "^8.0.6",
+    "node-loader": "^0.6.0",
+    "webpack": "^4.33.0",
+    "webpack-cli": "^3.3.3"
+  },
+  "dependencies": {
+    "bleno": "^0.5.0"
+  }
+}
