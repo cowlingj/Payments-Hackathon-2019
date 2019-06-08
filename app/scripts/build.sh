@@ -1,1 +1,1 @@
-go build -o build/app.go
+go build -o build/app
