@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Payment</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</head>
+
+<body>
+
+  <div class="row">
+  <div class="card grey lighten-5 col s4 offset-s4">
+    <div class="card-content">
+      Please pay £9.99
+    </div>
+    <div class="card-action">
+      <button id="submit" disabled class="btn waves-effect waves-light deep-purple darken-4" type="submit" name="action">Submit</button>
+    </div>
+  </div>
+  </div>
+  <script src="/static/js/bluetooth.js" type="application/javascript"></script>
+  <script type="application/javascript">    
+    var submitButton = document.querySelector("#submit")
+    submitButton.onclick = function() {
+      readKeyFromDevice()
+      .then(function(key) {
+        var ajax = new XMLHttpRequest()  
+        ajax.onload = function() { window.location = ajax.responseText }
+        ajax.onerror = function() { window.location = "/Failed" }
+        ajax.open("POST", "/pay")
+        ajax.setRequestHeader("Content-Type", "application/json")
+        ajax.setRequestHeader("Charset", "utf-8")
+        ajax.send("{ \"amount\": 999, \"key\": \"" + key + "\"}")      
+      }).catch(function (error) {
+        console.error('Connection failed!', error);
+      })
+    }
+    submitButton.removeAttribute("disabled")
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Settings</title>
+</head>
+<body>
+  <button id="reset" onclick="reset()">Get New Security Key</button>
+  <button disabled id="upload" onclick="upload()" >Upload Security Key to Device</button>
+  <script src="/static/js/bluetooth.js" type="application/javascript"></script>
+  <script type="application/javascript">
+    var newKey
+    function reset() {
+      var ajax = new XMLHttpRequest()
+      ajax.open("POST", "/key")
+      ajax.onerror = function(){ window.location = "/500" }
+      ajax.onload = function(){
+        newKey = ajax.responseText
+        document.querySelector("#upload").removeAttribute("disabled")
+      }
+      ajax.send()
+    }
+
+    function upload() {
+      writeKeyToDevice(newKey).then(function(){
+          window.location = "/"
+        }).catch(function(e) {
+          console.error(e)
+          window.location = "/500"
+        })
+    }
+  </script>
+</body>
+</html>

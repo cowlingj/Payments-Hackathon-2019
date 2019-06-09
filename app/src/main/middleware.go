@@ -3,6 +3,8 @@ package main
 import "fmt"
 import "net/http"
 import "time"
+import "io/ioutil"
+import "os"
 
 type middleware = func(next http.HandlerFunc) http.HandlerFunc
 
@@ -25,5 +27,17 @@ func timer(next http.HandlerFunc) http.HandlerFunc {
 		next(res, req)
 		var after = time.Now()
 		fmt.Printf("request took: %.3fs\n", after.Sub(before).Seconds())
+	}
+}
+
+func staticFile(filename string) http.HandlerFunc {
+	return func(res http.ResponseWriter, req *http.Request) {
+		body, err := ioutil.ReadFile("src/static/" + filename)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			http500(res, req)
+			return
+		}
+		res.Write(body)
 	}
 }

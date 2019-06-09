@@ -23,9 +23,7 @@ function writeKeyToDevice(key) {
     return service.getCharacteristic(0x2A3D);
   }).then(function (characteristic) {
     return characteristic.writeValue(str2ab(key));
-  }).catch(function (error) {
-    console.error('Connection failed!', error);
-  });
+  })
 }
 
 function readKeyFromDevice() {
@@ -43,7 +41,5 @@ function readKeyFromDevice() {
     return characteristic.readValue();
   }).then(function (dataView) {
      return ab2str(dataView.buffer)
-  }).catch(function (error) {
-    console.error('Connection failed!', error);
   });
 }
