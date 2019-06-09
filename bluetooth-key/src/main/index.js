@@ -11,7 +11,7 @@ let isEnabled = false
 bleno.on('stateChange', (state) => {
 
   if (state === "poweredOn") {
-      bleno.startAdvertising("bluetooth buddy", [UUID], (e) => {
+      bleno.startAdvertising("bluetooth_buddy", [UUID], (e) => {
         if (e !== null) {
           console.error("couldn't begin listening a connection")
           force()

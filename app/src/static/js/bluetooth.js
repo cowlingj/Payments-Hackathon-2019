@@ -1,8 +1,9 @@
-var bluetoothName = "bluetooth buddy"
+var bluetoothName = "bluetooth_buddy"
 
 function writeKeyToDevice(key) {
   return navigator.bluetooth.requestDevice({
-    filters: [{ name: bluetoothName }]
+    acceptAllDevices: true,
+    //filters: [{ name: bluetoothName }]
   }).then(function (device) {
     return device.gatt.connect();
   }).then(function (server) {
@@ -16,10 +17,11 @@ function writeKeyToDevice(key) {
   });
 }
 
-function readKeyFromDevice(key) {
+function readKeyFromDevice() {
 
   return navigator.bluetooth.requestDevice({
-    filters: [{ name: bluetoothName }]
+    acceptAllDevices: true,
+    //filters: [{ name: bluetoothName }]
   }).then(function (device) {
     return device.gatt.connect();
   }).then(function (server) {
