@@ -1,36 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Settings</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
+
 <body>
-  <button id="reset" onclick="reset()">Get New Security Key</button>
-  <button disabled id="upload" onclick="upload()" >Upload Security Key to Device</button>
+
+  <div class="row">
+    <div class="card grey lighten-5 col s8 offset-s2 center-align">
+      <div class="card-content">
+        <p class="card-title">Settings</p>
+        <i class="material-icons large">settings</i>
+      </div>
+      <div class="card-action">
+        <a href="" id="reset" onclick="reset(); return false">Create New Key</a>
+        <a href="" class="grey-text" id="upload" onclick="upload(); return false">Send to Device</a>
+      </div>
+    </div>
+  </div>
+
+
   <script src="/static/js/bluetooth.js" type="application/javascript"></script>
   <script type="application/javascript">
     var newKey
     function reset() {
       var ajax = new XMLHttpRequest()
-      ajax.open("POST", "/key")
-      ajax.onerror = function(){ window.location = "/500" }
-      ajax.onload = function(){
+      ajax.open("GET", "/key")
+      ajax.onerror = function () { window.location = "/500" }
+      ajax.onload = function () {
         newKey = ajax.responseText
-        document.querySelector("#upload").removeAttribute("disabled")
+        document.querySelector("#reset").classList.add("grey-text")
+        document.querySelector("#upload").classList.remove("grey-text")
       }
       ajax.send()
     }
 
     function upload() {
-      writeKeyToDevice(newKey).then(function(){
-          window.location = "/"
-        }).catch(function(e) {
-          console.error(e)
-          window.location = "/500"
-        })
+      if (newKey == null) {
+        return
+      }
+
+      writeKeyToDevice(newKey).then(function () {
+        window.location = "/"
+      }).catch(function (e) {
+        console.error(e)
+        window.location = "/500"
+      })
     }
   </script>
 </body>
+
 </html>

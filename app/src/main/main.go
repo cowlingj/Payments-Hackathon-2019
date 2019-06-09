@@ -18,8 +18,8 @@ func main() {
 	http.HandleFunc("/", log(staticFile("html/Home.html")))
 	http.HandleFunc("/home", log(staticFile("html/Home.html")))
 	http.HandleFunc("/success", log(staticFile("html/Success.html")))
-	http.HandleFunc("/failure", log(staticFile("html/Failure.html")))
-	http.HandleFunc("/failed", log(staticFile("html/Failure.html")))
+	http.HandleFunc("/failure", log(staticFile("html/Failed.html")))
+	http.HandleFunc("/failed", log(staticFile("html/Failed.html")))
 	http.HandleFunc("/pay", log(pay))
 	
 	http.HandleFunc("/static/", log(static))

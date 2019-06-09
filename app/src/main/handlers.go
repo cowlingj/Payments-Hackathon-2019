@@ -62,8 +62,13 @@ func pay(res http.ResponseWriter, req *http.Request) {
 
 
 var staticRegex = regexp.MustCompile("^/static/(.+)")
+var svgRegex = regexp.MustCompile("^*.svg$")
 func static(res http.ResponseWriter, req *http.Request) {
 	var match = staticRegex.FindSubmatch([]byte(filepath.Clean(req.URL.Path)))
+
+	if (svgRegex.Match([]byte(req.URL.Path))) {
+		res.Header().Set("Content-Type", "image/svg+xml")
+	}
 
 	if (len(match) != 2) {
 		http404(res, req)
